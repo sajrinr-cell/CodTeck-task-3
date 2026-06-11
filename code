@@ -1,0 +1,157 @@
+# ==========================================
+#  IRIS SPECIES CLASSIFICATION PROJECT
+# ==========================================
+
+# Import Libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import os
+
+from google.colab import files
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# ==========================================
+# UPLOAD DATASET
+# ==========================================
+
+uploaded = files.upload()
+
+# Get uploaded filename automatically
+filename = list(uploaded.keys())[0]
+
+print(f"\nUploaded File: {filename}")
+
+# ==========================================
+# LOAD DATASET
+# ==========================================
+
+df = pd.read_csv(filename)
+
+print("\nFirst 5 Rows:")
+print(df.head())
+
+print("\nColumn Names:")
+print(df.columns)
+
+print("\nDataset Shape:")
+print(df.shape)
+
+# ==========================================
+# DATA CLEANING
+# ==========================================
+
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+df.drop_duplicates(inplace=True)
+
+print("\nShape After Removing Duplicates:")
+print(df.shape)
+
+# ==========================================
+# DATA ANALYSIS
+# ==========================================
+
+print("\nSpecies Distribution:")
+print(df["Species"].value_counts())
+
+print("\nStatistical Summary:")
+print(df.describe())
+
+# ==========================================
+# VISUALIZATION
+# ==========================================
+
+plt.figure(figsize=(6,4))
+df["Species"].value_counts().plot(kind="bar")
+plt.title("Species Distribution")
+plt.xlabel("Species")
+plt.ylabel("Count")
+plt.show()
+
+plt.figure(figsize=(6,4))
+plt.scatter(df["SepalLengthCm"], df["PetalLengthCm"])
+plt.xlabel("Sepal Length (cm)")
+plt.ylabel("Petal Length (cm)")
+plt.title("Sepal Length vs Petal Length")
+plt.show()
+
+# ==========================================
+# FEATURES & TARGET
+# ==========================================
+
+X = df[[
+    "SepalLengthCm",
+    "SepalWidthCm",
+    "PetalLengthCm",
+    "PetalWidthCm"
+]]
+
+y = df["Species"]
+
+# ==========================================
+# TRAIN TEST SPLIT
+# ==========================================
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+# ==========================================
+# MODEL TRAINING
+# ==========================================
+
+model = RandomForestClassifier(
+    n_estimators=100,
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+# ==========================================
+# PREDICTION
+# ==========================================
+
+y_pred = model.predict(X_test)
+
+# ==========================================
+# EVALUATION
+# ==========================================
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("\n Accuracy Score:")
+print(round(accuracy * 100, 2), "%")
+
+print("\n Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\n Classification Report:")
+print(classification_report(y_test, y_pred))
+
+# ==========================================
+# SAMPLE PREDICTION
+# ==========================================
+
+sample_flower = [[5.1, 3.5, 1.4, 0.2]]
+
+prediction = model.predict(sample_flower)
+
+print("\n Predicted Species:")
+print(prediction[0])
+
+# ==========================================
+# DASHBOARD SUMMARY
+# ==========================================
+
+print("\n========== DASHBOARD ==========")
+print("Total Records :", len(df))
+print("Total Features:", len(X.columns))
+print("Species Types :", df["Species"].nunique())
+print("Model Accuracy:", round(accuracy * 100, 2), "%")
+print("================================")
