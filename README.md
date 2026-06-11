@@ -1,2 +1,13 @@
 # CodTeck-task-3
-Develop a machine learning model to classify iris flowers into different species using flower measurements. The project includes data preprocessing, visualization, model training, and performance evaluation.
+INTERN ID: CITS3035
+
+FULL NAME: Sajrin R
+
+NO.OF.WEEKS: 4 WEEKS
+
+PROJECT NAME: Iris Species Classification
+
+ Project Scope
+
+The scope of this project is to develop a machine learning model that classifies iris flowers into different species based on their sepal and petal measurements. The project includes data preprocessing, visualization, model training, prediction, and performance evaluation to achieve accurate flower classification.
+
